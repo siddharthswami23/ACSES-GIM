@@ -1,3 +1,4 @@
+
 let username = '';
 
 Swal.fire({
@@ -656,7 +657,7 @@ function makeMaze(level) {
     player = null;
   }
   
-  let difficulties = {1: 10, 2: 15, 3: 20};
+  let difficulties = {1: 10, 2: 15, 3: 25};
   difficulty = difficulties[level];
   
   cellSize = mazeCanvas.width / difficulty;
