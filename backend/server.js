@@ -20,7 +20,7 @@ app.use(express.json());
 app.use('/api/leaderboard', leaderboardRoutes);
 app.use('/api/users', userRoutes); 
 
-app.post('/',(req,res)=>{
+app.get('/',(req,res)=>{
   res.send("working");
 })
 const PORT = process.env.PORT || 3500;
