@@ -138,9 +138,23 @@ input:focus, select:focus {
     border-radius: 10px;
 }
 
-#instructions {
-    margin-top: 30px;
+#controls {
+    position: fixed;
+    top: 85%;
+    left: 0;
+    right: 0;
+    height: 100px;
 }
+
+#controls p {
+    font-size:2rem;
+}
+#controls i{
+    font-size: 2rem;
+    border: 2px solid purple;
+    border-radius: 10px;
+}
+
 
 /* Responsive adjustments */
 @media only screen and (max-width: 600px) {
@@ -162,4 +176,24 @@ input:focus, select:focus {
         width: 100%;
         height: auto;
     }
+
+    
+#controls {
+    position: fixed;
+    top: 70%;
+    left: 0;
+    right: 0;
+    height: 100px;
+}
+
+#controls p{
+    font-size: 1rem;
+}
+
+#controls i{
+    font-size: 2rem;
+    border: 5px solid purple;
+    border-radius: 15px;
+}
+
 }

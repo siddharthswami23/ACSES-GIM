@@ -37,9 +37,21 @@
         </div>
       </div>
 
-      <p id="instructions">Use arrow keys to move the key to the house!</p>
+      <div id="controls" class="flex flex-col items-center gap-5">
+        <p id="instructions">Use arrow keys to move the key to the house!</p>
+        <div id="button-div" class="flex flex-col gap-5">
+          <i class="ri-arrow-up-line"></i>
+          <div id="bottom-container" class="w-full flex items-center gap-5">
+            <i class="ri-arrow-left-line"></i>
+            <i class="ri-arrow-down-line"></i>
+            <i class="ri-arrow-right-line"></i>
+          </div>
+        </div>
+      </div>
     </div>
 
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script
       type="text/javascript"

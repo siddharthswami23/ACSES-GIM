@@ -1,13 +1,12 @@
-
 let username = '';
-
+//tackling login errors
 Swal.fire({
   title: "Enter your username",
   input: "text",
   inputAttributes: {
     autocapitalize: "off"
   },
-  showCancelButton: true,
+  showCancelButton: false,
   confirmButtonText: "Submit",
   preConfirm: (login) => {
     if (login) {
@@ -16,16 +15,50 @@ Swal.fire({
       Swal.showValidationMessage('Please enter a username');
     }
   },
-  allowOutsideClick: () => !Swal.isLoading()
+  allowOutsideClick: false,
+  customClass: {
+    input: 'swal2-input-custom'
+  },
+  inputClass: 'swal2-input-custom',
+  didOpen: () => {
+    const input = Swal.getInput();
+    if (input) {
+      input.style.color = '#7066E0';
+      input.style.backgroundColor = '#fff';
+    }
+  }
 }).then((result) => {
   if (result.isConfirmed) {
     username = result.value;
     Swal.fire({
       title: `Welcome, ${username}!`,
-      text: "Let's start the game!"
+      text: "Let's start the game!",
+      confirmButtonText: "Start Game"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        startGame();
+      }
     });
   }
 });
+
+// Add this CSS to your stylesheet or in a <style> tag in your HTML
+// .swal2-input-custom {
+//   color: #000 !important;
+// }
+
+function startGame() {
+  if (username === '') {
+    Swal.fire({
+      title: "Error",
+      text: "Please enter a username before starting the game.",
+      icon: "error"
+    });
+  } else {
+    // Add your game initialization code here
+    console.log(`Starting game for ${username}`);
+  }
+}
 
 
 function rand(max) {
@@ -290,6 +323,24 @@ function Maze(Width, Height) {
   genMap();
   defineStartEnd();
   defineMaze();
+}
+
+// Add event listeners for arrow buttons
+document.addEventListener('DOMContentLoaded', function() {
+  const upArrow = document.querySelector('.ri-arrow-up-line');
+  const leftArrow = document.querySelector('.ri-arrow-left-line');
+  const downArrow = document.querySelector('.ri-arrow-down-line');
+  const rightArrow = document.querySelector('.ri-arrow-right-line');
+
+  upArrow.addEventListener('click', () => simulateKeyPress(38));
+  leftArrow.addEventListener('click', () => simulateKeyPress(37));
+  downArrow.addEventListener('click', () => simulateKeyPress(40));
+  rightArrow.addEventListener('click', () => simulateKeyPress(39));
+});
+
+function simulateKeyPress(keyCode) {
+  const event = new KeyboardEvent('keydown', { keyCode: keyCode });
+  window.dispatchEvent(event);
 }
 
 function DrawMaze(Maze, ctx, cellsize, endSprite = null) {
@@ -657,7 +708,7 @@ function makeMaze(level) {
     player = null;
   }
   
-  let difficulties = {1: 10, 2: 15, 3: 25};
+  let difficulties = {1: 10, 2: 15, 3: 20};
   difficulty = difficulties[level];
   
   cellSize = mazeCanvas.width / difficulty;
