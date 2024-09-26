@@ -9,12 +9,11 @@
     "routes": [
       {
         "src": "/api/(.*)",
-        "dest": "/api/$1"
-      },
-      {
-        "src": "/(.*)",
         "dest": "server.js"
       }
-    ]
+    ],
+    "env": {
+      "MONGO_URL": "@mongo_url"
+    }
   }
   
