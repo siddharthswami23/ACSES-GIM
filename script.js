@@ -9,7 +9,7 @@ Swal.fire({
   showCancelButton: false,
   confirmButtonText: "Submit",
   preConfirm: (login) => {
-    if (login) {
+    if (login.trim() !== '') {
       return login;
     } else {
       Swal.showValidationMessage('Please enter a username');
@@ -27,9 +27,11 @@ Swal.fire({
       input.style.backgroundColor = '#fff';
     }
   }
-}).then((result) => {
+})
+.then((result) => {
   if (result.isConfirmed) {
     username = result.value;
+    CreateUser(username);  // Add this line to create the user
     Swal.fire({
       title: `Welcome, ${username}!`,
       text: "Let's start the game!",
@@ -41,6 +43,27 @@ Swal.fire({
     });
   }
 });
+
+
+function CreateUser(username){
+  fetch('https://acses-gim-maze-leaderboard.vercel.app/api/users/add', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      username: username,
+      score: 0,
+    }),
+  })
+  .then(response => response.json())
+  .then(data => {
+    console.log('User created:', data);
+  })
+  .catch((error) => {
+    console.error('Error creating user:', error);
+  });
+}
 
 
 function startGame() {
@@ -141,7 +164,26 @@ function displayFinalScore() {
       url("/images/nyan-cat.gif")
       left top
       no-repeat
-    `
+    `,
+    showCancelButton: false,
+    confirmButtonText: 'OK',
+  }).then((result) => {
+    if (result.isConfirmed) {
+      // Send data to backend
+      fetch('https://acses-gim-maze-leaderboard.vercel.app/api/users/add', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: username, // You might want to get the actual username
+          points: totalScore
+        }),
+      })
+      .then(response => response.json())
+      .then(data => console.log('Success:', data))
+      .catch((error) => console.error('Error:', error));
+    }
   });
 }
 
@@ -724,3 +766,4 @@ function makeMaze(level) {
   
   startTime = new Date();
 }
+
