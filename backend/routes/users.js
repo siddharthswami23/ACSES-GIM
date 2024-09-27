@@ -5,7 +5,11 @@ const router = express.Router();
 router.post('/add', async (req, res) => {
   try {
     const { username, points } = req.body;
+    const existingUser = await User.findOne({ username });
 
+    if (existingUser && points === 0) {
+      return res.status(400).json({ text: 'User with this username already exists' });
+    }
     const updatedUser = await User.findOneAndUpdate(
       { username },                     
       { $set: { points } },            
