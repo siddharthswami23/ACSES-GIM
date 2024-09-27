@@ -42,10 +42,6 @@ Swal.fire({
   }
 });
 
-// Add this CSS to your stylesheet or in a <style> tag in your HTML
-// .swal2-input-custom {
-//   color: #000 !important;
-// }
 
 function startGame() {
   if (username === '') {
@@ -118,6 +114,9 @@ function displayVictoryMess(moves, time, level) {
       `
     },
     confirmButtonText: buttonText,
+    allowOutsideClick: false,
+    allowEscapeKey: false,
+    allowEnterKey: false
   }).then((result) => {
     if (result.isConfirmed) {
       if (level < 3) {
