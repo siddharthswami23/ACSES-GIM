@@ -32,27 +32,46 @@ Swal.fire({
 .then((result) => {
   if (result.isConfirmed) {
     username = result.value;
-    CreateUser(username)
-      .then(res => res.json())
-      .then(async res => {
-        if (res.userExists) {
-          await Swal.fire({
-            title: "Oops..",
-            text: "Username already exists. Please choose a different username.",
-            icon: "error"
-          });
-          return;
-        }
-        Swal.fire({
-          title: `Welcome, ${username}!`,
-          text: "Let's start the game!",
-          confirmButtonText: "Start Game"
-        }).then((result) => {
-          if (result.isConfirmed) {
-            startGame();
-          }
+    fetch('https://acses-gim-maze-leaderboard.vercel.app/api/users/check-username', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ username }),
+    })
+    .then(res => res.json())
+    .then(async res => {
+      if (res.isUserExists) {
+
+        await Swal.fire({
+          title: "Oops..",
+          text: "Username already exists. Please choose a different username.",
+          icon: "error"
         });
+        return;
+      }
+      // If username is unique, create the user
+      CreateUser(username)
+        .then(() => {
+          Swal.fire({
+            title: `Welcome, ${username}!`,
+            text: "Let's start the game!",
+            confirmButtonText: "Start Game"
+          }).then((result) => {
+            if (result.isConfirmed) {
+              startGame();
+            }
+          });
+        });
+    })
+    .catch(error => {
+      console.error('Error checking username:', error);
+      Swal.fire({
+        title: "Error",
+        text: "An error occurred. Please try again.",
+        icon: "error"
       });
+    });
   }
 });
 
