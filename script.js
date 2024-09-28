@@ -4,7 +4,8 @@ Swal.fire({
   title: "Enter your username",
   input: "text",
   inputAttributes: {
-    autocapitalize: "off"
+    autocapitalize: "off",
+    autocomplete: "off"
   },
   showCancelButton: false,
   confirmButtonText: "Submit",
