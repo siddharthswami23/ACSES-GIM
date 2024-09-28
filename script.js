@@ -31,16 +31,27 @@ Swal.fire({
 .then((result) => {
   if (result.isConfirmed) {
     username = result.value;
-    CreateUser(username);  
-    Swal.fire({
-      title: `Welcome, ${username}!`,
-      text: "Let's start the game!",
-      confirmButtonText: "Start Game"
-    }).then((result) => {
-      if (result.isConfirmed) {
-        startGame();
-      }
-    });
+    CreateUser(username)
+      .then(res => res.json())
+      .then(async res => {
+        if (res.userExists) {
+          await Swal.fire({
+            title: "Oops..",
+            text: "Username already exists. Please choose a different username.",
+            icon: "error"
+          });
+          return;
+        }
+        Swal.fire({
+          title: `Welcome, ${username}!`,
+          text: "Let's start the game!",
+          confirmButtonText: "Start Game"
+        }).then((result) => {
+          if (result.isConfirmed) {
+            startGame();
+          }
+        });
+      });
   }
 });
 
