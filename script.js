@@ -31,7 +31,7 @@ Swal.fire({
 .then((result) => {
   if (result.isConfirmed) {
     username = result.value;
-    CreateUser(username);  // Add this line to create the user
+    CreateUser(username);  
     Swal.fire({
       title: `Welcome, ${username}!`,
       text: "Let's start the game!",
