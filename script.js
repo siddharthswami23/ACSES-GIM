@@ -737,7 +737,7 @@ window.onload = function() {
     new Date().getTime();
   sprite.setAttribute("crossOrigin", " ");
   sprite.onload = function() {
-    sprite = changeBrightness(1.2, sprite);
+    // sprite = changeBrightness(1.2, sprite);
     completeOne = true;
     console.log(completeOne);
     isComplete();
@@ -749,7 +749,7 @@ window.onload = function() {
   new Date().getTime();
   finishSprite.setAttribute("crossOrigin", " ");
   finishSprite.onload = function() {
-    finishSprite = changeBrightness(1.1, finishSprite);
+    // finishSprite = changeBrightness(1.1, finishSprite);
     completeTwo = true;
     console.log(completeTwo);
     isComplete();
