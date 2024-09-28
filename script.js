@@ -4,12 +4,13 @@ Swal.fire({
   title: "Enter your username",
   input: "text",
   inputAttributes: {
-    autocapitalize: "off"
+    autocapitalize: "off",
+    autocomplete: "off"
   },
   showCancelButton: false,
   confirmButtonText: "Submit",
   preConfirm: (login) => {
-    if (login) {
+    if (login.trim() !== '') {
       return login;
     } else {
       Swal.showValidationMessage('Please enter a username');
@@ -27,25 +28,74 @@ Swal.fire({
       input.style.backgroundColor = '#fff';
     }
   }
-}).then((result) => {
+})
+.then((result) => {
   if (result.isConfirmed) {
     username = result.value;
-    Swal.fire({
-      title: `Welcome, ${username}!`,
-      text: "Let's start the game!",
-      confirmButtonText: "Start Game"
-    }).then((result) => {
-      if (result.isConfirmed) {
-        startGame();
+    fetch('https://acses-gim-maze-leaderboard.vercel.app/api/users/check-username', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ username }),
+    })
+    .then(res => res.json())
+    .then(async res => {
+      if (res.isUserExists) {
+
+        await Swal.fire({
+          title: "Oops..",
+          text: "Username already exists. Please choose a different username.",
+          icon: "error"
+        });
+        return;
       }
+      // If username is unique, create the user
+      CreateUser(username)
+        .then(() => {
+          Swal.fire({
+            title: `Welcome, ${username}!`,
+            text: "Let's start the game!",
+            confirmButtonText: "Start Game"
+          }).then((result) => {
+            if (result.isConfirmed) {
+              startGame();
+            }
+          });
+        });
+    })
+    .catch(error => {
+      console.error('Error checking username:', error);
+      Swal.fire({
+        title: "Error",
+        text: "An error occurred. Please try again.",
+        icon: "error"
+      });
     });
   }
 });
 
-// Add this CSS to your stylesheet or in a <style> tag in your HTML
-// .swal2-input-custom {
-//   color: #000 !important;
-// }
+
+function CreateUser(username){
+  fetch('https://acses-gim-maze-leaderboard.vercel.app/api/users/add', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      username: username,
+      score: 0,
+    }),
+  })
+  .then(response => response.json())
+  .then(data => {
+    console.log('User created:', data);
+  })
+  .catch((error) => {
+    console.error('Error creating user:', error);
+  });
+}
+
 
 function startGame() {
   if (username === '') {
@@ -118,6 +168,9 @@ function displayVictoryMess(moves, time, level) {
       `
     },
     confirmButtonText: buttonText,
+    allowOutsideClick: false,
+    allowEscapeKey: false,
+    allowEnterKey: false
   }).then((result) => {
     if (result.isConfirmed) {
       if (level < 3) {
@@ -142,7 +195,26 @@ function displayFinalScore() {
       url("/images/nyan-cat.gif")
       left top
       no-repeat
-    `
+    `,
+    showCancelButton: false,
+    confirmButtonText: 'OK',
+  }).then((result) => {
+    if (result.isConfirmed) {
+      // Send data to backend
+      fetch('https://acses-gim-maze-leaderboard.vercel.app/api/users/add', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: username, // You might want to get the actual username
+          points: totalScore
+        }),
+      })
+      .then(response => response.json())
+      .then(data => console.log('Success:', data))
+      .catch((error) => console.error('Error:', error));
+    }
   });
 }
 
@@ -725,3 +797,4 @@ function makeMaze(level) {
   
   startTime = new Date();
 }
+
