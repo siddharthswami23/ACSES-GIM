@@ -17,7 +17,8 @@ Swal.fire({
   },
   allowOutsideClick: false,
   customClass: {
-    input: 'swal2-input-custom'
+    input: 'swal2-input-custom',
+    container: 'swal2-container-custom'
   },
   inputClass: 'swal2-input-custom',
   didOpen: () => {
@@ -25,6 +26,18 @@ Swal.fire({
     if (input) {
       input.style.color = '#7066E0';
       input.style.backgroundColor = '#fff';
+      input.style.margin = '20px auto 0 auto'; // Center the input box
+      input.style.display = 'block'; // Ensure it's a block element
+    }
+    // Add responsive styles
+    const container = Swal.getContainer();
+    if (container) {
+      container.style.padding = '0 1rem';
+    }
+    const popup = Swal.getPopup();
+    if (popup) {
+      popup.style.width = '90%';
+      popup.style.maxWidth = '400px';
     }
   }
 })
@@ -43,23 +56,103 @@ Swal.fire({
     .then(res => { 
       console.log(res,"data is here");
       if (res.data.isUserExist) {
-
-        alert("User with this username already exists");
-        location.reload();
-        console.log("already exist")
-      }
-          else{
-          Swal.fire({
-            title: `Welcome, ${username}!`,
-            text: "Let's start the game!",
-            confirmButtonText: "Start Game"
-          }).then((result) => {
-            if (result.isConfirmed) {
-              startGame();
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "User with this username already exists",
+          confirmButtonText: "OK",
+          allowOutsideClick: false,
+          allowEscapeKey: false,
+          customClass: {
+            container: 'swal2-container-custom'
+          },
+          didOpen: () => {
+            const container = Swal.getContainer();
+            if (container) {
+              container.style.padding = '0 1rem';
             }
-          });
-          console.log("game start")
+            const popup = Swal.getPopup();
+            if (popup) {
+              popup.style.width = '90%';
+              popup.style.maxWidth = '400px';
+            }
           }
+        }).then((result) => {
+          if (result.isConfirmed) {
+            Swal.fire({
+              title: "Enter a new username",
+              input: "text",
+              inputAttributes: {
+                autocapitalize: "off",
+                autocomplete: "off"
+              },
+              showCancelButton: false,
+              confirmButtonText: "Submit",
+              preConfirm: (login) => {
+                if (login.trim() !== '') {
+                  return login;
+                } else {
+                  Swal.showValidationMessage('Please enter a username');
+                }
+              },
+              allowOutsideClick: false,
+              allowEscapeKey: false,
+              customClass: {
+                container: 'swal2-container-custom'
+              },
+              didOpen: () => {
+                const input = Swal.getInput();
+                if (input) {
+                  input.style.margin = '20px auto 0 auto'; // Center the input box
+                  input.style.display = 'block'; // Ensure it's a block element
+                }
+                const container = Swal.getContainer();
+                if (container) {
+                  container.style.padding = '0 1rem';
+                }
+                const popup = Swal.getPopup();
+                if (popup) {
+                  popup.style.width = '90%';
+                  popup.style.maxWidth = '400px';
+                }
+              }
+            }).then((result) => {
+              if (result.isConfirmed) {
+                username = result.value;
+                console.log("New username:", username);
+                // Here you should add the logic to submit the new username to your API
+                // and handle the response accordingly
+              }
+            });
+          }
+        });
+        console.log("Username already exists");
+      } else {
+        Swal.fire({
+          title: `Welcome, ${username}!`,
+          text: "Let's start the game!",
+          confirmButtonText: "Start Game",
+          customClass: {
+            container: 'swal2-container-custom'
+          },
+          didOpen: () => {
+            const container = Swal.getContainer();
+            if (container) {
+              container.style.padding = '0 1rem';
+            }
+            const popup = Swal.getPopup();
+            if (popup) {
+              popup.style.width = '90%';
+              popup.style.maxWidth = '400px';
+            }
+          }
+        }).then((result) => {
+          if (result.isConfirmed) {
+            startGame();
+          }
+        });
+        console.log("Game start");
+      }
     })
     .catch(error => {
       console.log("err");
@@ -67,12 +160,25 @@ Swal.fire({
       Swal.fire({
         title: "Error",
         text: "An error occurred. Please try again.",
-        icon: "error"
+        icon: "error",
+        customClass: {
+          container: 'swal2-container-custom'
+        },
+        didOpen: () => {
+          const container = Swal.getContainer();
+          if (container) {
+            container.style.padding = '0 1rem';
+          }
+          const popup = Swal.getPopup();
+          if (popup) {
+            popup.style.width = '90%';
+            popup.style.maxWidth = '400px';
+          }
+        }
       });
     });
   }
 });
-
 
 
 
