@@ -1,4 +1,5 @@
 const express = require('express');
+const User = require('../models/user'); 
 const router = express.Router();
 
 
@@ -8,7 +9,7 @@ router.post('/add', async (req, res) => {
     const existingUser = await User.findOne({ username });
 
     if (existingUser && points === 0) {
-      return res.status(400).json({ text: 'User with this username already exists' ,isUserExist:true});
+      return res.status(200).json({ text: 'User with this username already exists' ,isUserExist:true});
     }
     const updatedUser = await User.findOneAndUpdate(
       { username },                     
