@@ -17,7 +17,8 @@ Swal.fire({
   },
   allowOutsideClick: false,
   customClass: {
-    input: 'swal2-input-custom'
+    input: 'swal2-input-custom',
+    container: 'swal2-container-custom'
   },
   inputClass: 'swal2-input-custom',
   didOpen: () => {
@@ -25,6 +26,18 @@ Swal.fire({
     if (input) {
       input.style.color = '#7066E0';
       input.style.backgroundColor = '#fff';
+      input.style.margin = '20px auto 0 auto'; // Center the input box
+      input.style.display = 'block'; // Ensure it's a block element
+    }
+    // Add responsive styles
+    const container = Swal.getContainer();
+    if (container) {
+      container.style.padding = '0 1rem';
+    }
+    const popup = Swal.getPopup();
+    if (popup) {
+      popup.style.width = '90%';
+      popup.style.maxWidth = '400px';
     }
   }
 })
@@ -49,7 +62,21 @@ Swal.fire({
           text: "User with this username already exists",
           confirmButtonText: "OK",
           allowOutsideClick: false,
-          allowEscapeKey: false
+          allowEscapeKey: false,
+          customClass: {
+            container: 'swal2-container-custom'
+          },
+          didOpen: () => {
+            const container = Swal.getContainer();
+            if (container) {
+              container.style.padding = '0 1rem';
+            }
+            const popup = Swal.getPopup();
+            if (popup) {
+              popup.style.width = '90%';
+              popup.style.maxWidth = '400px';
+            }
+          }
         }).then((result) => {
           if (result.isConfirmed) {
             Swal.fire({
@@ -69,7 +96,26 @@ Swal.fire({
                 }
               },
               allowOutsideClick: false,
-              allowEscapeKey: false
+              allowEscapeKey: false,
+              customClass: {
+                container: 'swal2-container-custom'
+              },
+              didOpen: () => {
+                const input = Swal.getInput();
+                if (input) {
+                  input.style.margin = '20px auto 0 auto'; // Center the input box
+                  input.style.display = 'block'; // Ensure it's a block element
+                }
+                const container = Swal.getContainer();
+                if (container) {
+                  container.style.padding = '0 1rem';
+                }
+                const popup = Swal.getPopup();
+                if (popup) {
+                  popup.style.width = '90%';
+                  popup.style.maxWidth = '400px';
+                }
+              }
             }).then((result) => {
               if (result.isConfirmed) {
                 username = result.value;
@@ -85,7 +131,21 @@ Swal.fire({
         Swal.fire({
           title: `Welcome, ${username}!`,
           text: "Let's start the game!",
-          confirmButtonText: "Start Game"
+          confirmButtonText: "Start Game",
+          customClass: {
+            container: 'swal2-container-custom'
+          },
+          didOpen: () => {
+            const container = Swal.getContainer();
+            if (container) {
+              container.style.padding = '0 1rem';
+            }
+            const popup = Swal.getPopup();
+            if (popup) {
+              popup.style.width = '90%';
+              popup.style.maxWidth = '400px';
+            }
+          }
         }).then((result) => {
           if (result.isConfirmed) {
             startGame();
@@ -100,12 +160,25 @@ Swal.fire({
       Swal.fire({
         title: "Error",
         text: "An error occurred. Please try again.",
-        icon: "error"
+        icon: "error",
+        customClass: {
+          container: 'swal2-container-custom'
+        },
+        didOpen: () => {
+          const container = Swal.getContainer();
+          if (container) {
+            container.style.padding = '0 1rem';
+          }
+          const popup = Swal.getPopup();
+          if (popup) {
+            popup.style.width = '90%';
+            popup.style.maxWidth = '400px';
+          }
+        }
       });
     });
   }
 });
-
 
 
 
