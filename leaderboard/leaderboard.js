@@ -1,7 +1,8 @@
 window.onload = function () {
-    fetch('https://acses-gim-maze-leaderboard.vercel.app/api/leaderboard/top')
-    .then(response => response.json())
-        .then(data => {
+    axios.post('https://acses-gim-maze-leaderboard.vercel.app/api/leaderboard/top')
+        .then(response => {
+            const data = response.data;
+            console.log(data,"here")
             const leaderboardDiv = document.querySelector('.containeer');
 
             data.forEach((entry, index) => {
@@ -12,12 +13,15 @@ window.onload = function () {
                 <div
         class="box flex justify-between items-center text-white text-2xl font-bold font-[cursive] border-2 border-black px-3 py-5 m-2"
       >
-        <h1>${index + 1}. ${entry.name}</h1>
-        <h1>${entry.score}</h1>
+        <h1>${index + 1}. ${entry.username}</h1>
+        <h1>${entry.points}</h1>
       </div>
-            `;
+                `;
 
                 leaderboardDiv.appendChild(box);
             });
         })
+        .catch(error => {
+            console.error('There was an error fetching the leaderboard data:', error);
+        });
 };
