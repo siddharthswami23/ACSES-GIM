@@ -44,24 +44,20 @@ Swal.fire({
       console.log(res,"data is here");
       if (res.data.isUserExist) {
 
-        // Swal.fire({
-        //   title: "Oops..",
-        //   text: "Username already exists. Please choose a different username.",
-        //   icon: "error"
-        // })
-        // Window.refresh();
+        alert("User with this username already exists");
+        location.reload();
         console.log("already exist")
       }
           else{
-          // Swal.fire({
-          //   title: `Welcome, ${username}!`,
-          //   text: "Let's start the game!",
-          //   confirmButtonText: "Start Game"
-          // }).then((result) => {
-          //   if (result.isConfirmed) {
-          //     startGame();
-          //   }
-          // });
+          Swal.fire({
+            title: `Welcome, ${username}!`,
+            text: "Let's start the game!",
+            confirmButtonText: "Start Game"
+          }).then((result) => {
+            if (result.isConfirmed) {
+              startGame();
+            }
+          });
           console.log("game start")
           }
     })
