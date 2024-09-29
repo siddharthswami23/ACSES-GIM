@@ -1,5 +1,4 @@
 let username = '';
-//tackling login errors
 Swal.fire({
   title: "Enter your username",
   input: "text",
@@ -32,39 +31,42 @@ Swal.fire({
 .then((result) => {
   if (result.isConfirmed) {
     username = result.value;
-    fetch('https://acses-gim-maze-leaderboard.vercel.app/api/users/check-username', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ username }),
-    })
-    .then(res => res.json())
-    .then(async res => {
-      if (res.isUserExists) {
-
-        await Swal.fire({
-          title: "Oops..",
-          text: "Username already exists. Please choose a different username.",
-          icon: "error"
-        });
-        return;
+    console.log(username)
+    axios.post('https://acses-gim-maze-leaderboard.vercel.app/api/users/add', 
+      { username, points: 0 }, 
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        }
       }
-      // If username is unique, create the user
-      CreateUser(username)
-        .then(() => {
-          Swal.fire({
-            title: `Welcome, ${username}!`,
-            text: "Let's start the game!",
-            confirmButtonText: "Start Game"
-          }).then((result) => {
-            if (result.isConfirmed) {
-              startGame();
-            }
-          });
-        });
+    )
+    .then(res => { 
+      console.log(res,"data is here");
+      if (res.data.isUserExist) {
+
+        // Swal.fire({
+        //   title: "Oops..",
+        //   text: "Username already exists. Please choose a different username.",
+        //   icon: "error"
+        // })
+        // Window.refresh();
+        console.log("already exist")
+      }
+          else{
+          // Swal.fire({
+          //   title: `Welcome, ${username}!`,
+          //   text: "Let's start the game!",
+          //   confirmButtonText: "Start Game"
+          // }).then((result) => {
+          //   if (result.isConfirmed) {
+          //     startGame();
+          //   }
+          // });
+          console.log("game start")
+          }
     })
     .catch(error => {
+      console.log("err");
       console.error('Error checking username:', error);
       Swal.fire({
         title: "Error",
@@ -76,25 +78,6 @@ Swal.fire({
 });
 
 
-function CreateUser(username){
-  fetch('https://acses-gim-maze-leaderboard.vercel.app/api/users/add', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      username: username,
-      score: 0,
-    }),
-  })
-  .then(response => response.json())
-  .then(data => {
-    console.log('User created:', data);
-  })
-  .catch((error) => {
-    console.error('Error creating user:', error);
-  });
-}
 
 
 function startGame() {
@@ -105,7 +88,6 @@ function startGame() {
       icon: "error"
     });
   } else {
-    // Add your game initialization code here
     console.log(`Starting game for ${username}`);
   }
 }
@@ -200,20 +182,24 @@ function displayFinalScore() {
     confirmButtonText: 'OK',
   }).then((result) => {
     if (result.isConfirmed) {
-      // Send data to backend
-      fetch('https://acses-gim-maze-leaderboard.vercel.app/api/users/add', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+      // Replace fetch with axios.post
+      axios.post('https://acses-gim-maze-leaderboard.vercel.app/api/users/add', 
+        {
           username: username, // You might want to get the actual username
           points: totalScore
-        }),
+        }, 
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        }
+      )
+      .then(response => {
+        console.log('Success:', response.data);
       })
-      .then(response => response.json())
-      .then(data => console.log('Success:', data))
-      .catch((error) => console.error('Error:', error));
+      .catch((error) => {
+        console.error('Error:', error);
+      });
     }
   });
 }
@@ -315,21 +301,21 @@ function Maze(Width, Height) {
         var ny = pos.y + modDir[direction].y;
 
         if (nx >= 0 && nx < width && ny >= 0 && ny < height) {
-          //Check if the tile is already visited
+          // Check if the tile is already visited
           if (!mazeMap[nx][ny].visited) {
-            //Carve through walls from this tile to next
+            // Carve through walls from this tile to next
             mazeMap[pos.x][pos.y][direction] = true;
             mazeMap[nx][ny][modDir[direction].o] = true;
 
-            //Set Currentcell as next cells Prior visited
+            // Set Currentcell as next cells Prior visited
             mazeMap[nx][ny].priorPos = pos;
-            //Update Cell position to newly visited location
+            // Update Cell position to newly visited location
             pos = {
               x: nx,
               y: ny
             };
             cellsVisited++;
-            //Recursively call this method on the next tile
+            // Recursively call this method on the next tile
             move = true;
             break;
           }
@@ -337,8 +323,8 @@ function Maze(Width, Height) {
       }
 
       if (!move) {
-        //  If it failed to find a direction,
-        //  move the current position back to the prior cell and Recall the method.
+        // If it failed to find a direction,
+        // move the current position back to the prior cell and Recall the method.
         pos = mazeMap[pos.x][pos.y].priorPos;
       }
       if (numCells == cellsVisited) {
@@ -718,7 +704,7 @@ window.onload = function() {
     ctx.canvas.height = viewWidth - viewWidth / 100;
   }
 
-  //Load and edit sprites
+  // Load and edit sprites
   var completeOne = false;
   var completeTwo = false;
   var isComplete = () => {
@@ -797,4 +783,3 @@ function makeMaze(level) {
   
   startTime = new Date();
 }
-
