@@ -834,6 +834,23 @@ function makeMaze(level) {
     let endTime = new Date();
     let timeDiff = (endTime - startTime) / 1000; // in seconds
     displayVictoryMess(moves, timeDiff.toFixed(2), level);
+    axios.post('https://acses-gim-maze-leaderboard.vercel.app/api/users/add', 
+      {
+        username: username, // You might want to get the actual username
+        points: totalScore
+      }, 
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      }
+    )
+    .then(response => {
+      console.log('Success:', response.data);
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
   }, sprite);
   if (document.getElementById("mazeContainer").style.opacity < "100") {
     document.getElementById("mazeContainer").style.opacity = "100";
