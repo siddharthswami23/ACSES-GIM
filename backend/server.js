@@ -3,6 +3,7 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const leaderboardRoutes = require('./routes/leaderboard');
 const userRoutes = require('./routes/users'); 
+const leaderboardRoutesWinner = require('./routes/winners');
 require('dotenv').config();
 
 const app = express();
@@ -17,6 +18,7 @@ db.once("open", () => console.log("successful"));
 
 app.use(express.json());
 
+app.use('/api/leaderboard', leaderboardRoutesWinner);
 app.use('/api/leaderboard', leaderboardRoutes);
 app.use('/api/users', userRoutes); 
 
