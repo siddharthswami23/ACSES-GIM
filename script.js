@@ -79,51 +79,7 @@ Swal.fire({
           }
         }).then((result) => {
           if (result.isConfirmed) {
-            Swal.fire({
-              title: "Enter a new username",
-              input: "text",
-              inputAttributes: {
-                autocapitalize: "off",
-                autocomplete: "off"
-              },
-              showCancelButton: false,
-              confirmButtonText: "Submit",
-              preConfirm: (login) => {
-                if (login.trim() !== '') {
-                  return login;
-                } else {
-                  Swal.showValidationMessage('Please enter a username');
-                }
-              },
-              allowOutsideClick: false,
-              allowEscapeKey: false,
-              customClass: {
-                container: 'swal2-container-custom'
-              },
-              didOpen: () => {
-                const input = Swal.getInput();
-                if (input) {
-                  input.style.margin = '20px auto 0 auto'; // Center the input box
-                  input.style.display = 'block'; // Ensure it's a block element
-                }
-                const container = Swal.getContainer();
-                if (container) {
-                  container.style.padding = '0 1rem';
-                }
-                const popup = Swal.getPopup();
-                if (popup) {
-                  popup.style.width = '90%';
-                  popup.style.maxWidth = '400px';
-                }
-              }
-            }).then((result) => {
-              if (result.isConfirmed) {
-                username = result.value;
-                console.log("New username:", username);
-                // Here you should add the logic to submit the new username to your API
-                // and handle the response accordingly
-              }
-            });
+              location.reload();
           }
         });
         console.log("Username already exists");
