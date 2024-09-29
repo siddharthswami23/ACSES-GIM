@@ -32,12 +32,12 @@ Swal.fire({
 .then((result) => {
   if (result.isConfirmed) {
     username = result.value;
-    fetch('https://acses-gim-maze-leaderboard.vercel.app/api/users/check-username', {
+    fetch('https://acses-gim-maze-leaderboard.vercel.app/api/users/add', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ username }),
+      body: JSON.stringify({ username,points:0 }),
     })
     .then(res => res.json())
     .then(async res => {
@@ -51,8 +51,8 @@ Swal.fire({
         return;
       }
       // If username is unique, create the user
-      CreateUser(username)
-        .then(() => {
+      // CreateUser(username)
+        // .then(() => {
           Swal.fire({
             title: `Welcome, ${username}!`,
             text: "Let's start the game!",
@@ -62,7 +62,7 @@ Swal.fire({
               startGame();
             }
           });
-        });
+        // });
     })
     .catch(error => {
       console.error('Error checking username:', error);
@@ -76,25 +76,25 @@ Swal.fire({
 });
 
 
-function CreateUser(username){
-  fetch('https://acses-gim-maze-leaderboard.vercel.app/api/users/add', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      username: username,
-      score: 0,
-    }),
-  })
-  .then(response => response.json())
-  .then(data => {
-    console.log('User created:', data);
-  })
-  .catch((error) => {
-    console.error('Error creating user:', error);
-  });
-}
+// function CreateUser(username){
+//   fetch('https://acses-gim-maze-leaderboard.vercel.app/api/users/add', {
+//     method: 'POST',
+//     headers: {
+//       'Content-Type': 'application/json',
+//     },
+//     body: JSON.stringify({
+//       username: username,
+//       score: 0,
+//     }),
+//   })
+//   .then(response => response.json())
+//   .then(data => {
+//     console.log('User created:', data);
+//   })
+//   .catch((error) => {
+//     console.error('Error creating user:', error);
+//   });
+// }
 
 
 function startGame() {

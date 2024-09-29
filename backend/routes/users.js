@@ -1,11 +1,10 @@
 const express = require('express');
-const mongoose = require('mongoose');
 const router = express.Router();
 
 
 router.post('/add', async (req, res) => {
   try {
-    const { username, points = 0 } = req.body;
+    const { username, points } = req.body;
     const existingUser = await User.findOne({ username });
 
     if (existingUser && points === 0) {
