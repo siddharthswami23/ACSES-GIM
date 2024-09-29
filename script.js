@@ -43,23 +43,56 @@ Swal.fire({
     .then(res => { 
       console.log(res,"data is here");
       if (res.data.isUserExist) {
-
-        alert("User with this username already exists");
-        location.reload();
-        console.log("already exist")
-      }
-          else{
-          Swal.fire({
-            title: `Welcome, ${username}!`,
-            text: "Let's start the game!",
-            confirmButtonText: "Start Game"
-          }).then((result) => {
-            if (result.isConfirmed) {
-              startGame();
-            }
-          });
-          console.log("game start")
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "User with this username already exists",
+          confirmButtonText: "OK",
+          allowOutsideClick: false,
+          allowEscapeKey: false
+        }).then((result) => {
+          if (result.isConfirmed) {
+            Swal.fire({
+              title: "Enter a new username",
+              input: "text",
+              inputAttributes: {
+                autocapitalize: "off",
+                autocomplete: "off"
+              },
+              showCancelButton: false,
+              confirmButtonText: "Submit",
+              preConfirm: (login) => {
+                if (login.trim() !== '') {
+                  return login;
+                } else {
+                  Swal.showValidationMessage('Please enter a username');
+                }
+              },
+              allowOutsideClick: false,
+              allowEscapeKey: false
+            }).then((result) => {
+              if (result.isConfirmed) {
+                username = result.value;
+                console.log("New username:", username);
+                // Here you should add the logic to submit the new username to your API
+                // and handle the response accordingly
+              }
+            });
           }
+        });
+        console.log("Username already exists");
+      } else {
+        Swal.fire({
+          title: `Welcome, ${username}!`,
+          text: "Let's start the game!",
+          confirmButtonText: "Start Game"
+        }).then((result) => {
+          if (result.isConfirmed) {
+            startGame();
+          }
+        });
+        console.log("Game start");
+      }
     })
     .catch(error => {
       console.log("err");
