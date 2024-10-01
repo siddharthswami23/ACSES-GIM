@@ -1,18 +1,24 @@
 let username = '';
+let passkey = 'lacasadetech';
+
 Swal.fire({
-  title: "Enter your username",
-  input: "text",
+  title: "Enter your passkey",
+  input: "password",
   inputAttributes: {
     autocapitalize: "off",
     autocomplete: "off"
   },
   showCancelButton: false,
   confirmButtonText: "Submit",
-  preConfirm: (login) => {
-    if (login.trim() !== '') {
-      return login;
+  preConfirm: (key) => {
+    if (key.trim() !== '') {
+      if (key === passkey) {
+        return key;
+      } else {
+        Swal.showValidationMessage('Incorrect passkey');
+      }
     } else {
-      Swal.showValidationMessage('Please enter a username');
+      Swal.showValidationMessage('Please enter a passkey');
     }
   },
   allowOutsideClick: false,
@@ -26,10 +32,9 @@ Swal.fire({
     if (input) {
       input.style.color = '#7066E0';
       input.style.backgroundColor = '#fff';
-      input.style.margin = '20px auto 0 auto'; // Center the input box
-      input.style.display = 'block'; // Ensure it's a block element
+      input.style.margin = '20px auto 0 auto'; 
+      input.style.display = 'block';
     }
-    // Add responsive styles
     const container = Swal.getContainer();
     if (container) {
       container.style.padding = '0 1rem';
@@ -40,98 +45,142 @@ Swal.fire({
       popup.style.maxWidth = '400px';
     }
   }
-})
-.then((result) => {
+}).then((result) => {
   if (result.isConfirmed) {
-    username = result.value;
-    console.log(username)
-    axios.post('https://acses-gim-maze-leaderboard.vercel.app/api/users/add', 
-      { username, points: 0 }, 
-      {
-        headers: {
-          'Content-Type': 'application/json',
+
+    Swal.fire({
+      title: "Enter your username",
+      input: "text",
+      inputAttributes: {
+        autocapitalize: "off",
+        autocomplete: "off"
+      },
+      showCancelButton: false,
+      confirmButtonText: "Submit",
+      preConfirm: (login) => {
+        if (login.trim() !== '') {
+          return login;
+        } else {
+          Swal.showValidationMessage('Please enter a username');
+        }
+      },
+      allowOutsideClick: false,
+      customClass: {
+        input: 'swal2-input-custom',
+        container: 'swal2-container-custom'
+      },
+      inputClass: 'swal2-input-custom',
+      didOpen: () => {
+        const input = Swal.getInput();
+        if (input) {
+          input.style.color = '#7066E0';
+          input.style.backgroundColor = '#fff';
+          input.style.margin = '20px auto 0 auto'; 
+          input.style.display = 'block'; 
+        }
+        const container = Swal.getContainer();
+        if (container) {
+          container.style.padding = '0 1rem';
+        }
+        const popup = Swal.getPopup();
+        if (popup) {
+          popup.style.width = '110%';
+          popup.style.maxWidth = '400px';
         }
       }
-    )
-    .then(res => { 
-      console.log(res,"data is here");
-      if (res.data.isUserExist) {
-        Swal.fire({
-          icon: "error",
-          title: "Oops...",
-          text: "User with this username already exists",
-          confirmButtonText: "OK",
-          allowOutsideClick: false,
-          allowEscapeKey: false,
-          customClass: {
-            container: 'swal2-container-custom'
-          },
-          didOpen: () => {
-            const container = Swal.getContainer();
-            if (container) {
-              container.style.padding = '0 1rem';
-            }
-            const popup = Swal.getPopup();
-            if (popup) {
-              popup.style.width = '90%';
-              popup.style.maxWidth = '400px';
+    }).then((result) => {
+      if (result.isConfirmed) {
+        username = result.value;
+        console.log(username);
+        axios.post('https://acses-gim-maze-leaderboard.vercel.app/api/users/add',
+          { username, points: 0 },
+          {
+            headers: {
+              'Content-Type': 'application/json',
             }
           }
-        }).then((result) => {
-          if (result.isConfirmed) {
-              location.reload();
+        )
+        .then(res => {
+          console.log(res, "data is here");
+          if (res.data.isUserExist) {
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: "User with this username already exists",
+              confirmButtonText: "OK",
+              allowOutsideClick: false,
+              allowEscapeKey: false,
+              customClass: {
+                container: 'swal2-container-custom'
+              },
+              didOpen: () => {
+                const container = Swal.getContainer();
+                if (container) {
+                  container.style.padding = '0 1rem';
+                }
+                const popup = Swal.getPopup();
+                if (popup) {
+                  popup.style.width = '90%';
+                  popup.style.maxWidth = '400px';
+                }
+              }
+            }).then((result) => {
+              if (result.isConfirmed) {
+                location.reload();
+              }
+            });
+            console.log("Username already exists");
+          } else {
+            Swal.fire({
+              title: `Welcome, ${username}!`,
+              text: "Let's start the game!",
+              confirmButtonText: "Start Game",
+              customClass: {
+                container: 'swal2-container-custom'
+              },
+              didOpen: () => {
+                const container = Swal.getContainer();
+                if (container) {
+                  container.style.padding = '0 1rem';
+                }
+                const popup = Swal.getPopup();
+                if (popup) {
+                  popup.style.width = '90%';
+                  popup.style.maxWidth = '400px';
+                }
+              }
+            }).then((result) => {
+              if (result.isConfirmed) {
+                startGame();
+              }
+            });
+            console.log("Game start");
           }
+        })
+        .catch(error => {
+          console.log("err");
+          console.error('Error checking username:', error);
+          Swal.fire({
+            title: "Error",
+            text: "An error occurred. Please try again.",
+            icon: "error",
+            customClass: {
+              container: 'swal2-container-custom'
+            },
+            didOpen: () => {
+              const container = Swal.getContainer();
+              if (container) {
+                container.style.padding = '0 1rem';
+              }
+              const popup = Swal.getPopup();
+              if (popup) {
+                popup.style.width = '90%';
+                popup.style.maxWidth = '400px';
+              }
+            }
+          });
         });
-        console.log("Username already exists");
-      } else {
-        Swal.fire({
-          title: `Welcome, ${username}!`,
-          text: "Let's start the game!",
-          confirmButtonText: "Start Game",
-          customClass: {
-            container: 'swal2-container-custom'
-          },
-          didOpen: () => {
-            const container = Swal.getContainer();
-            if (container) {
-              container.style.padding = '0 1rem';
-            }
-            const popup = Swal.getPopup();
-            if (popup) {
-              popup.style.width = '90%';
-              popup.style.maxWidth = '400px';
-            }
-          }
-        }).then((result) => {
-          if (result.isConfirmed) {
-            startGame();
-          }
-        });
-        console.log("Game start");
       }
-    })
-    .catch(error => {
-      console.log("err");
-      console.error('Error checking username:', error);
-      Swal.fire({
-        title: "Error",
-        text: "An error occurred. Please try again.",
-        icon: "error",
-        customClass: {
-          container: 'swal2-container-custom'
-        },
-        didOpen: () => {
-          const container = Swal.getContainer();
-          if (container) {
-            container.style.padding = '0 1rem';
-          }
-          const popup = Swal.getPopup();
-          if (popup) {
-            popup.style.width = '90%';
-            popup.style.maxWidth = '400px';
-          }
-        }
-      });
     });
   }
 });
@@ -240,10 +289,9 @@ function displayFinalScore() {
     confirmButtonText: 'OK',
   }).then((result) => {
     if (result.isConfirmed) {
-      // Replace fetch with axios.post
       axios.post('https://acses-gim-maze-leaderboard.vercel.app/api/users/add', 
         {
-          username: username, // You might want to get the actual username
+          username: username, 
           points: totalScore
         }, 
         {
