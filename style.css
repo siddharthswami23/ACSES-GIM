@@ -13,8 +13,12 @@ body {
   right: 0;
   background-color: #fff;
   font-family: "Poppins", sans-serif;
+  background: url("./images/11.jpg");
+  /* background-size:cover; */
 }
-
+#arrowKeys{
+  color: white;
+}
 #view {
   margin-top: 30px;
 }
@@ -157,7 +161,9 @@ select:focus {
   right: 0;
   height: 100px;
 }
-
+#instructions{
+  color:white;
+}
 #controls p {
   font-size: 2rem;
 }
