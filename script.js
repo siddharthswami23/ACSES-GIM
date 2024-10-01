@@ -1,5 +1,5 @@
 let username = '';
-let passkey = 'lacasadetech';
+let passkey = 'conocimiento';
 
 Swal.fire({
   title: "Enter your passkey",

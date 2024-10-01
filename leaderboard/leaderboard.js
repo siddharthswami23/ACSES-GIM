@@ -10,14 +10,17 @@ window.onload = function () {
         const box = document.createElement("div");
         box.classList.add(
           "w-[20vw]",
-          "h-[20vh]",
+          "h-[10vh]",
           "my-5",
           "ml-auto",
           "mr-auto",
           "py-5",
           "px-3",
           "bg-blue-200",
-          "bg-opacity-80"
+          "bg-opacity-80",
+          "flex",
+          "items-center",
+          "justify-center","rounded-xl"
         );
 
         box.innerHTML = `
@@ -25,7 +28,6 @@ window.onload = function () {
         class="box flex flex-col justify-between capitalize items-center text-white text-2xl font-bold font-[cursive] px-3 py-5"
       >
         <h1>${index + 1}. ${entry.username}</h1>
-        <h1>${entry.points}</h1>
       </div>
                 `;
 
