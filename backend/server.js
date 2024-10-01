@@ -18,9 +18,9 @@ db.once("open", () => console.log("successful"));
 
 app.use(express.json());
 
-app.use('/api/leaderboard', leaderboardRoutesWinner);
-app.use('/api/leaderboard', leaderboardRoutes);
-app.use('/api/users', userRoutes); 
+// app.use('/api/leaderboard', leaderboardRoutesWinner);
+// app.use('/api/leaderboard', leaderboardRoutes);
+// app.use('/api/users', userRoutes); 
 
 app.get('/',(req,res)=>{
   res.send("working on");
