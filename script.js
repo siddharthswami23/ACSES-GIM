@@ -36,7 +36,7 @@ Swal.fire({
     }
     const popup = Swal.getPopup();
     if (popup) {
-      popup.style.width = '90%';
+      popup.style.width = '110%';
       popup.style.maxWidth = '400px';
     }
   }
